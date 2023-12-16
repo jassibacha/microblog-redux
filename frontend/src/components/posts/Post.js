@@ -1,5 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Post({ posts, deletePost }) {
     const { postId } = useParams();
@@ -22,16 +24,24 @@ function Post({ posts, deletePost }) {
     };
 
     return (
-        <div>
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
+        <div className="post-content">
+            <h2>{post.title}</h2>
+            <div className="description">{post.description}</div>
             <p>{post.body}</p>
-            <button onClick={handleEdit} className="btn btn-primary">
-                Edit Post
-            </button>
-            <button onClick={handleDelete} className="btn btn-danger">
-                Delete Post
-            </button>
+            <div className="d-flex justify-content-end">
+                <button
+                    onClick={handleEdit}
+                    className="btn btn-link text-primary"
+                >
+                    <FontAwesomeIcon icon={faEdit} />
+                </button>
+                <button
+                    onClick={handleDelete}
+                    className="btn btn-link text-danger"
+                >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                </button>
+            </div>
         </div>
     );
 }
