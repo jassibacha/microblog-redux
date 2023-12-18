@@ -2,11 +2,16 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import Comment from './Comment';
+import CommentForm from '../forms/CommentForm';
 
-function Post({ posts, deletePost }) {
+function Post({ posts, deletePost, comments, addComment, deleteComment }) {
     const { postId } = useParams();
     const navigate = useNavigate();
     const post = posts.find((p) => p.id === postId);
+    const postComments = comments.filter(
+        (comment) => comment.postId === post.id
+    );
 
     if (!post) {
         return <div>Loading...</div>; // Or handle the "post not found" scenario
@@ -42,6 +47,18 @@ function Post({ posts, deletePost }) {
                     <FontAwesomeIcon icon={faTrashAlt} />
                 </button>
             </div>
+
+            <h3>Comments</h3>
+            {postComments.map((comment) => (
+                <Comment
+                    key={comment.id}
+                    comment={comment}
+                    deleteComment={deleteComment}
+                />
+            ))}
+
+            {/* Add Comment Form */}
+            <CommentForm postId={post.id} addComment={addComment} />
         </div>
     );
 }

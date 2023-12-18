@@ -1,12 +1,18 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header from '../components/layout/Header';
 import PostForm from '../components/forms/PostForm';
 import PostList from '../components/posts/PostList';
 import Post from '../components/posts/Post';
 
-function AppRouter({ posts, addPost, editPost, deletePost }) {
+function AppRouter({
+    posts,
+    addPost,
+    editPost,
+    deletePost,
+    comments,
+    addComment,
+    deleteComment,
+}) {
     return (
         <Routes>
             <Route path="/" element={<PostList posts={posts} />} />
@@ -16,7 +22,15 @@ function AppRouter({ posts, addPost, editPost, deletePost }) {
             />
             <Route
                 path=":postId"
-                element={<Post posts={posts} deletePost={deletePost} />}
+                element={
+                    <Post
+                        posts={posts}
+                        deletePost={deletePost}
+                        comments={comments}
+                        addComment={addComment}
+                        deleteComment={deleteComment}
+                    />
+                }
             />
             <Route
                 path=":postId/edit"
