@@ -1,40 +1,18 @@
 import React, { useState } from 'react';
 import Header from './components/layout/Header';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import AppRouter from './routes/AppRouter';
+import initialPosts from './data/InitialPosts';
+import initialComments from './data/InitialComments';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-    // Placeholder posts data
-    const [posts, setPosts] = useState([
-        {
-            id: '1',
-            title: 'Post 1',
-            description: 'Description 1',
-            body: 'Body 1',
-        },
-        {
-            id: '2',
-            title: 'Post 2',
-            description: 'Description 2',
-            body: 'Body 2',
-        },
-        {
-            id: '3',
-            title: 'Post 3',
-            description: 'Description 3',
-            body: 'Body 3',
-        },
-        {
-            id: '4',
-            title: 'Post 4',
-            description: 'Description 4',
-            body: 'Body 4',
-        },
-        // ... more posts
-    ]);
+    // Placeholder data for posts & comments
+    const [posts, setPosts] = useState(initialPosts);
+    const [comments, setComments] = useState(initialComments);
 
     const addPost = (newPost) => {
-        setPosts([...posts, { ...newPost, id: Date.now().toString() }]);
+        setPosts([...posts, { ...newPost, id: uuidv4() }]);
     };
 
     const editPost = (updatedPost) => {
@@ -47,6 +25,20 @@ function App() {
 
     const deletePost = (postId) => {
         setPosts(posts.filter((post) => post.id !== postId));
+        setComments(comments.filter((comment) => comment.postId !== postId)); // Also remove related comments
+    };
+
+    const addComment = (postId, text) => {
+        const newComment = {
+            id: uuidv4(),
+            postId,
+            text,
+        };
+        setComments([...comments, newComment]);
+    };
+
+    const deleteComment = (commentId) => {
+        setComments(comments.filter((comment) => comment.id !== commentId));
     };
 
     return (
@@ -58,6 +50,9 @@ function App() {
                     addPost={addPost}
                     editPost={editPost}
                     deletePost={deletePost}
+                    comments={comments}
+                    addComment={addComment}
+                    deleteComment={deleteComment}
                 />
             </div>
         </Router>
