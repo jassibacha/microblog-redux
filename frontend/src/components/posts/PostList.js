@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
-function PostList({ posts }) {
+function PostList() {
+    const posts = useSelector((state) => Object.values(state.posts));
     return (
         <div className="row">
             {posts.map((post) => (

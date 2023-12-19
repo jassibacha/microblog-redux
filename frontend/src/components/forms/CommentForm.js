@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addComment } from '../../redux/actions/commentActions';
 
-function CommentForm({ postId, addComment }) {
+function CommentForm({ postId }) {
     const [formData, setFormData] = useState({ text: '' });
+    const dispatch = useDispatch();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -13,7 +16,7 @@ function CommentForm({ postId, addComment }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        addComment(postId, formData.text);
+        dispatch(addComment({ postId, text: formData.text }));
         setFormData({ text: '' }); // Clear the form
     };
 

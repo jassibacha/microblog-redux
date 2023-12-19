@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { addPost, editPost } from '../../redux/actions/postActions';
 
-function PostForm({ savePost, posts }) {
+function PostForm() {
     const INITIAL_STATE = { title: '', description: '', body: '' };
     const [formData, setFormData] = useState(INITIAL_STATE);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { postId } = useParams(); // Used for editing
+    const posts = useSelector((state) => state.posts);
 
     useEffect(() => {
-        if (postId) {
-            const postToEdit = posts.find((p) => p.id === postId);
-            if (postToEdit) {
-                setFormData({ ...postToEdit });
-            }
+        // If postId exists, we are editing an existing post
+        if (postId && posts[postId]) {
+            setFormData(posts[postId]);
         } else {
-            setFormData(INITIAL_STATE); // Reset form when adding a new post
+            // New post, use INITIAL_STATE
+            setFormData(INITIAL_STATE);
         }
     }, [postId, posts]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        savePost({ ...formData, id: postId }); // Pass ID for edit, undefined for new post
+        if (postId) {
+            // If postId exists, we are editing an existing post
+            dispatch(editPost(postId, formData));
+        } else {
+            // For a new post, no need to generate an ID here
+            dispatch(addPost(formData));
+        }
         navigate('/');
     };
 
